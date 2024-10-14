@@ -1,4 +1,4 @@
-this is an outfit recomender system , which will help you to style yourselve using the modern technology
+This is an outfit recomender system , which will help you to style yourselve using the modern technology
 featuers - 
 Visual Search: Upload an image or take a photo of your current outfit, and the system will analyze it to recommend items that match.
 Style Recommendations: Get personalized suggestions for outfits based on your image and occasion.
