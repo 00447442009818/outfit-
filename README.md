@@ -1,58 +1,23 @@
-# model 
-import tensorflow
-from tensorflow.keras.preprocessing import image
-from tensorflow.keras.layers import GlobalMaxPooling2D
-from tensorflow.keras.applications.resnet50 import ResNet50, preprocess_input
-import numpy as np
-from numpy.linalg import norm
-import os
-from  tqdm import tqdm
-import pickle
-
-model = ResNet50(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
-model.trainable = False
-
-model = tensorflow.keras.Sequential([
-    model,
-    GlobalMaxPooling2D()
-])
-
-#print(model.summary())
-
-def extract_feature(img_path,model):
-    try:
-        img = image.load_img(img_path, target_size=(224, 224))
-        img_array = image.img_to_array(img)
-        expanded_img_array = np.expand_dims(img_array, axis=0)
-        preprocessed_img = preprocess_input(expanded_img_array)
-        result = model.predict(preprocessed_img).flatten()
-        normalized_result = result /  norm(result)
-        return normalized_result
-    except:
-        print("Error processing image:", img_path)
-        return None
-
-images_dir = os.path.join('images')
-filenames = []
-feature_list = []
-
-for root, dirs, files in os.walk(images_dir):
-    for file in tqdm(files):  # Iterate over the files in the directory
-        img_path = os.path.join(root, file)
-        feature = extract_feature(img_path, model)
-        if feature is not None:
-            filenames.append(img_path)
-            feature_list.append(feature)
-
-# Save the feature list and filenames to pickle files
-pickle.dump(feature_list, open('embeddings.pkl', 'wb'))
-pickle.dump(filenames, open('filenames.pkl', 'wb'))
-
-
-# Extract features
-for img_path in tqdm(filenames):
-            feature = extract_feature(img_path, model)
-            if feature is not None:
-                feature_list.append(feature)
-                pickle.dump(feature_list,open('embeddings.pkl', 'wb' ))
-                pickle.dump(filenames, open('filenames.pkl', 'wb'))
+this is an outfit recomender system , which will help you to style yourselve using the modern technology
+featuers - 
+Visual Search: Upload an image or take a photo of your current outfit, and the system will analyze it to recommend items that match.
+Style Recommendations: Get personalized suggestions for outfits based on your image and occasion.
+Machine Learning: The system improves its recommendations with every interaction, learning your preferences over time.
+User-Friendly Interface: Seamlessly upload photos and receive outfit suggestions.
+Dynamic Fashion Database: Recommendations are sourced from a continuously updated database of fashion styles and trends.
+Technology Stack-
+Backend: Python
+Machine Learning: TensorFlow, Keras
+Image Processing: PIL, OpenCV
+Data Storage: Pickle for storing image embeddings
+Frontend: Streamlit
+Algorithm: Nearest Neighbors for similarity search
+How It Works
+File Upload: Users can upload an image using the file uploader in the app.
+Feature Extraction: The uploaded image is processed to extract features using the pre-trained ResNet50 model.
+Recommendation: The extracted features are compared with precomputed embeddings to find similar outfits using the Nearest Neighbors algorithm.
+Display: The app displays the uploaded image and the recommended outfits side by side.
+File Structure
+page.py: This file contains the main logic for image upload, feature extraction, and the recommendation engine. It defines functions to process uploaded images, extract features, and recommend similar outfits based on user inputs.
+test.py: This file includes test cases for the various functions in page.py. It ensures that the image processing, feature extraction, and recommendation functionalities work as intended. You can run this file to validate your implementation and check for any issues.
+main.py: This is the entry point of the application. It initializes and runs the Streamlit app, handling the user interface and managing user interactions.
